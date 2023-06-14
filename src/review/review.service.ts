@@ -10,7 +10,8 @@ export class ReviewService {
     constructor(@InjectModel(ReviewModel.name) private reviewModel:Model<ReviewDocument>){}
 
     async create(dto:CreateReviewDto){
-        const newReview = new this.reviewModel({...dto})
+        const productId = new Types.ObjectId(dto.productId)
+        const newReview = new this.reviewModel({...dto, productId})
         await newReview.save()
         return newReview
         }

@@ -10,7 +10,7 @@ export class ProductCharacteristic{
     value:string
 }
 export type ProductDocument = HydratedDocument<ProductModel>
-@Schema()
+@Schema({timestamps:true})
 export class ProductModel {
     @Prop()
     image:string;
@@ -19,16 +19,19 @@ export class ProductModel {
     title:string;
 
     @Prop()
+    name1:string;
+
+    @Prop()
     price:number;
 
     @Prop()
-    oldPrice:number;
+    oldPrice?:number;
 
     @Prop()
     credit:number;
 
     @Prop()
-    calculatedRating:number;
+    rating:number;
 
     @Prop()
     description:string;
@@ -42,8 +45,8 @@ export class ProductModel {
     @Prop({type: ()=>Array<string>})
     categories:Array<string>
 
-
-    tags:string;
+    @Prop({type: ()=>Array<string>})
+    tags:Array<string>;
 
     @Prop({type:()=>Array<ProductCharacteristic>})
     characteristics:Array<ProductCharacteristic>

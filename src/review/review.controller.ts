@@ -15,6 +15,7 @@ export class ReviewController {
         return res
     }
 
+    
     @Delete('delete/:id')
     async delete(@Param('id') id:string){
         const deletedReview = await this.reviewService.delete(id)
@@ -26,7 +27,6 @@ export class ReviewController {
         }
     }
 
-    @UseGuards(JwtGuard)
     @Get('byProduct/:productId')
     async getByProductId(@Param('productId') productId:string){
         const products = await this.reviewService.getByProductId(productId)
