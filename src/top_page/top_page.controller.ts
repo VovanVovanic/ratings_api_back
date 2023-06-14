@@ -1,31 +1,45 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TopPageModel } from './top_page.model/top_page.model';
 import { FindProductDto } from 'src/product/dto/find_product.dto';
 import { ProductModel } from 'src/product/product.model/product.model';
+import { CreateTopPageDto } from './dto/create_top_page.dto';
+import { TopPageService } from './top_page.service';
+import { FindTopPageDto } from './dto/find_top_page.dto';
 
-@Controller('top-page')
+@Controller('top_page')
 export class TopPageController {
+    constructor(private readonly topPageService:TopPageService){}
+
+    @UsePipes(new ValidationPipe)
     @Post('create')
-    async create(@Param('id') id:string, @Body() dto: Omit<TopPageModel, '_id'>){
-
+    async create(@Param('id') id:string, @Body() dto:CreateTopPageDto){
+        return await this.topPageService.create(dto)
     }
 
-    @Delete(':id')
+    @Delete('delete/:id')
     async delete(@Param('id') id:string){
+        return await this.topPageService.delete(id)
     }
 
-    @Patch('update')
+    @Patch('update/:id')
     async update(@Param('id') id:string, @Body() dto: TopPageModel){
-        
+        return await this.topPageService.updateById(id, dto)
     }
 
-    @Get(':id')
-    async get(@Body() dto:ProductModel){  
+    @Get('findById/:id')
+    async getById(@Param('id') id:string){ 
+        return await this.topPageService.findById(id)
     }
 
+    @Get('findByAlias/:alias')
+    async getByAlias(@Param('alias') alias:string){ 
+        return await this.topPageService.findByAlias(alias)
+    }
+
+    @UsePipes(new ValidationPipe)
     @HttpCode(200)
-    @Post()
-    async find_product(@Body() dto:FindProductDto){
-
+    @Get('findByCategory/:category')
+    async findByCategory(@Param('category') category:string, @Body() dto:FindTopPageDto){
+        return await this.topPageService.findByCategory(dto.firstCategory)
     }
 }

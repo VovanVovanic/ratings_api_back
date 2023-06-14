@@ -1,0 +1,5 @@
+export const PAGE_WASNT_CREATED = "The page not created"
+export const PAGE_NOT_FOUND = "The page not found"
+export const PAGE_NOT_UPDATED = "The page has not updated"
+export const THE_PAGE = "The page with alias"
+export const ALREADY_EXIST = "already exist"

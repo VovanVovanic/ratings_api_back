@@ -31,7 +31,7 @@ export class AdvantagesData {
 }
 export type TopPageDocument = HydratedDocument<TopPageModel>
 
-@Schema()
+@Schema({timestamps:true})
 export class TopPageModel {
   @Prop({enum:TopLevelCategory})
   firstCategory: TopLevelCategory;
@@ -39,8 +39,8 @@ export class TopPageModel {
   @Prop()
   secondCategory: string;
 
-  @Prop({unique:true})
-  aliase: string;
+  @Prop({unique:true, required:true, index:true})
+  alias: string;
 
   @Prop()
   title: string;
