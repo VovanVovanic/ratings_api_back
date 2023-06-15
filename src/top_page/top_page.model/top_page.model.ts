@@ -61,4 +61,4 @@ export class TopPageModel {
   tagsTitle?: string;
 }
 
-export const TopPageSchema = SchemaFactory.createForClass(TopPageModel)
+export const TopPageSchema = SchemaFactory.createForClass(TopPageModel).index({"$**":"text"})

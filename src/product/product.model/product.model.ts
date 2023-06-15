@@ -19,9 +19,6 @@ export class ProductModel {
     title:string;
 
     @Prop()
-    name1:string;
-
-    @Prop()
     price:number;
 
     @Prop()

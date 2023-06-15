@@ -74,4 +74,9 @@ export class TopPageService {
         const foundPages = await this.topPageModel.find({firstCategory},{alias:1, secondCategory:1,category:1, firstCategory:1, title:1})
             return foundPages
     }
+
+    async findByText(text:string){
+        const res = await this.topPageModel.find({$text:{$search:text, $caseSensitive:false, $language:'english'}})
+            return res
+    }
 }

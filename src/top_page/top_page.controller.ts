@@ -36,6 +36,11 @@ export class TopPageController {
         return await this.topPageService.findByAlias(alias)
     }
 
+    @Get('findByText/:text')
+    async getByText(@Param('text') text:string){ 
+        return await this.topPageService.findByText(text)
+    }
+
     @UsePipes(new ValidationPipe)
     @HttpCode(200)
     @Get('findByCategory/:category')
