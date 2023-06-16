@@ -1,0 +1,1 @@
+export const FILE_NOT_UPLOADED = "The file hasn't uploaded"
