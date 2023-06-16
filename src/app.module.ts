@@ -10,6 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { getMongoConfig } from './configs/mongoConfig';
 import { FilesModule } from './files/files.module';
+import { SitemapModule } from './sitemap/sitemap.module';
 
 
 @Module({
@@ -25,7 +26,8 @@ import { FilesModule } from './files/files.module';
       useFactory: getMongoConfig
     }),
     UserModule,
-    FilesModule
+    FilesModule,
+    SitemapModule
     ],
   controllers: [AppController],
   providers: [AppService],

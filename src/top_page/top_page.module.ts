@@ -7,6 +7,7 @@ import { TopPageService } from './top_page.service';
 @Module({
   imports:[MongooseModule.forFeature([{name:TopPageModel.name, schema:TopPageSchema}])],
   controllers: [TopPageController],
-  providers: [TopPageService]
+  providers: [TopPageService],
+  exports:[TopPageService]
 })
 export class TopPageModule {}

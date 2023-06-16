@@ -50,13 +50,16 @@ export class TopPageService {
     }
     async findById(id:string){
         const foundPage = await this.topPageModel.findById(id)
-
         if(!foundPage){
             throw new HttpException(PAGE_NOT_FOUND, HttpStatus.NOT_FOUND)
         }
         else{
             return foundPage
         }
+    }
+
+    async findAll(){
+        return await this.topPageModel.find({})
     }
 
     async findByAlias(alias:string){
