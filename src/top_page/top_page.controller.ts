@@ -1,14 +1,20 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Logger, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TopPageModel } from './top_page.model/top_page.model';
 import { FindProductDto } from 'src/product/dto/find_product.dto';
 import { ProductModel } from 'src/product/product.model/product.model';
 import { CreateTopPageDto } from './dto/create_top_page.dto';
 import { TopPageService } from './top_page.service';
 import { FindTopPageDto } from './dto/find_top_page.dto';
+import { HhService } from 'src/hh/hh.service';
+import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 
 @Controller('top_page')
 export class TopPageController {
-    constructor(private readonly topPageService:TopPageService){}
+    constructor(
+        private readonly topPageService:TopPageService,
+        private readonly hhService:HhService,
+        private readonly scheduleRegistry:SchedulerRegistry
+        ){}
 
     @UsePipes(new ValidationPipe)
     @Post('create')
@@ -46,5 +52,18 @@ export class TopPageController {
     @Get('findByCategory/:category')
     async findByCategory(@Param('category') category:string, @Body() dto:FindTopPageDto){
         return await this.topPageService.findByCategory(dto.firstCategory)
+    }
+
+    @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT, {name: "test"})
+    async test(){
+        Logger.log('test')
+        const job  = this.scheduleRegistry.getCronJob('test')
+        const data = await this.topPageService.findForHhUpdate(new Date())
+        for(let page of data){
+            const hhData = await this.hhService.getData(page.category)
+            page.hh = hhData;
+            await this.topPageService.updateById(page._id, page)
+            return page
+        }
     }
 }

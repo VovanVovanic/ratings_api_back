@@ -11,10 +11,15 @@ import { UserModule } from './user/user.module';
 import { getMongoConfig } from './configs/mongoConfig';
 import { FilesModule } from './files/files.module';
 import { SitemapModule } from './sitemap/sitemap.module';
+import { TelegramModule } from './telegram/telegram.module';
+import { getTelegramConfigs } from './configs/telegramConfigs';
+import { HhModule } from './hh/hh.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     AuthModule,
     ReviewModule, 
@@ -27,7 +32,13 @@ import { SitemapModule } from './sitemap/sitemap.module';
     }),
     UserModule,
     FilesModule,
-    SitemapModule
+    SitemapModule,
+    TelegramModule.forRootAsync({
+      imports:[ConfigModule],
+      inject:[ConfigService],
+      useFactory: getTelegramConfigs
+    }),
+    HhModule
     ],
   controllers: [AppController],
   providers: [AppService],

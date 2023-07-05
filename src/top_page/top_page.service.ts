@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { TopLevelCategory, TopPageDocument, TopPageModel } from './top_page.model/top_page.model';
-import { Model } from 'mongoose';
+import { Model, Types} from 'mongoose';
 import { CreateTopPageDto } from './dto/create_top_page.dto';
 import { ALREADY_EXIST, PAGE_NOT_FOUND, PAGE_NOT_UPDATED, PAGE_WASNT_CREATED, THE_PAGE } from './const/topPageConst';
+import { addDays } from 'date-fns';
 
 @Injectable()
 export class TopPageService {
@@ -38,7 +39,7 @@ export class TopPageService {
 
     }
 
-    async updateById(id:string,dto: TopPageModel){
+    async updateById(id:string | Types.ObjectId, dto: TopPageModel){
         const updatedPage = await this.topPageModel.findByIdAndUpdate(id, dto, {new:true})
 
         if(!updatedPage){
@@ -94,4 +95,15 @@ export class TopPageService {
         const res = await this.topPageModel.find({$text:{$search:text, $caseSensitive:false, $language:'english'}})
             return res
     }
+
+    async findForHhUpdate(data:Date){
+        return this.topPageModel.find(
+            {firstCategory:0,
+                $or: [
+                    {'hh.updatedAt':{$lt:addDays(data,-1)}},
+                    {'hh.updatedAt':{$exists:false}}
+                    ]
+            
+    })
+}
 }

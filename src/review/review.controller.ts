@@ -3,15 +3,34 @@ import { CreateReviewDto } from './dto/createReview.dto';
 import { ReviewService } from './review.service';
 import { NOTHING_IS_FOUND, REVIEW_NOT_FOUND } from './constants';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { TelegramService } from 'src/telegram/telegram.service';
 
 @Controller('review')
 export class ReviewController {
-    constructor(private readonly reviewService:ReviewService){}
+    constructor(
+        private readonly reviewService:ReviewService,
+        private readonly telegramService:TelegramService
+        ){}
+
+
+    @UsePipes(new ValidationPipe())
+	@Post('notify')
+	async notify(@Body() dto: CreateReviewDto) {
+		const message = `Name: ${dto.name}\n`
+			+ `Title: ${dto.title}\n`
+			+ `Description: ${dto.description}\n`
+			+ `Rating: ${dto.rating}\n`
+			+ `Product ID: ${dto.productId}`;
+		return this.telegramService.sendNotification(message);
+	}
 
     @UsePipes(new ValidationPipe)
     @Post('create')
     async create(@Param('id') id:string, @Body() dto: CreateReviewDto){
         const res = await this.reviewService.create(dto)
+        if(res){
+            this.notify(dto)
+        }
         return res
     }
 
