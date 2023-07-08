@@ -49,8 +49,8 @@ export class TopPageController {
 
     @UsePipes(new ValidationPipe)
     @HttpCode(200)
-    @Get('findByCategory/:category')
-    async findByCategory(@Param('category') category:string, @Body() dto:FindTopPageDto){
+    @Post('findByCategory')
+    async findByCategory( @Body() dto:FindTopPageDto){
         return await this.topPageService.findByCategory(dto.firstCategory)
     }
 
